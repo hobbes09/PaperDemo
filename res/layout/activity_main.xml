@@ -1,0 +1,40 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:id="@+id/canvas">              
+    <TextView 
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="coordinates"
+        android:layout_gravity="center_horizontal" />
+    <TextView 
+        android:id="@+id/tvDrag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="coordinates"
+        android:layout_gravity="center_horizontal" />
+
+   <RelativeLayout
+        android:id="@+id/top_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="20dp"
+        android:orientation="horizontal"
+        android:tag="top_container"
+        >
+
+        <ImageView
+            android:id="@+id/tennis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="5dp"
+            android:src="@drawable/tennis" />
+
+     </RelativeLayout>
+
+ 
+</LinearLayout>
