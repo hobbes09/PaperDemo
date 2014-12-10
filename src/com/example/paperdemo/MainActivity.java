@@ -1,5 +1,7 @@
 package com.example.paperdemo;
 
+import com.example.paperdemo.DummyShadowBuilder;
+
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipDescription;
@@ -12,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -30,11 +33,13 @@ www.101apps.co.za
 */
 public class MainActivity extends Activity implements OnDragListener, View.OnLongClickListener, OnTouchListener {
 
-    private static final String TAG = "junk";
+    private static final String TAG = "TEST";
     public static TextView tv, tvDrag;
     View ball;  ImageView ball1;
     LinearLayout canvas;
     RelativeLayout rl;
+    private LayoutParams layoutParams;
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,18 +69,19 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
     //    called when ball has been touched and held
     @Override
     public boolean onLongClick(View imageView) {
-        //        the ball has been touched
-//            create clip data holding data of the type MIMETYPE_TEXT_PLAIN
+        // the ball has been touched
+    	// create clip data holding data of the type MIMETYPE_TEXT_PLAIN
         ClipData clipData = ClipData.newPlainText("", "");
 
         View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(imageView);
-            /*start the drag - contains the data to be dragged,
-            metadata for this data and callback for drawing shadow*/
+        /*start the drag - contains the data to be dragged,
+        metadata for this data and callback for drawing shadow*/
         imageView.startDrag(clipData, shadowBuilder, imageView, 0);
-//        we're dragging the shadow so make the view invisible
+        // we're dragging the shadow so make the view invisible
         imageView.setVisibility(View.INVISIBLE);
         return true;
     }
+    
 
     //    called when the ball starts to be dragged
     //    used by top and bottom layout containers
@@ -83,13 +89,14 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
     public boolean onDrag(View receivingLayoutView, DragEvent dragEvent) {
         View draggedImageView = (View) dragEvent.getLocalState();
         
+        
         draggedImageView.setVisibility(View.VISIBLE);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) (50+(200*(dragEvent.getY()/1000))), (int) (50+(200*(dragEvent.getY()/1000))));
-        params.leftMargin = rl.getWidth()/2 - 50; 
-        params.topMargin = 50;
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) (50+(100*(dragEvent.getY()/500))), (int) (50+(100*(dragEvent.getY()/500))));
+ 
+        params.leftMargin = (int) (50 + dragEvent.getX());
+        params.topMargin = (int) (dragEvent.getY());
         rl.removeView(ball1);
         rl.addView(ball1, params);
-        
         
         //LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams((int) (30+(50*(dragEvent.getY()/1000))), (int) (30+(50*(dragEvent.getY()/1000))));
         //ball1.setLayoutParams(layoutParams);
@@ -105,8 +112,7 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
 
             case DragEvent.ACTION_DRAG_STARTED:
                 Log.i(TAG, "drag action started");
-
-                // Determines if this View can accept the dragged data
+             // Determines if this View can accept the dragged data
                 if (dragEvent.getClipDescription()
                         .hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN)) {
                     Log.i(TAG, "Can accept this data");
@@ -129,7 +135,8 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
                 return true;
 
             case DragEvent.ACTION_DRAG_LOCATION:
-                Log.i(TAG, "drag action location");
+                Log.i(TAG, "drag action location");                
+                
                 /*triggered after ACTION_DRAG_ENTERED
                 stops after ACTION_DRAG_EXITED*/
                 return true;
@@ -140,7 +147,6 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
                 return true;
 
             case DragEvent.ACTION_DROP:
-            	
                   /* the listener receives this action type when
                   drag shadow released over the target view
             the action only sent here if ACTION_DRAG_STARTED returned true
@@ -153,8 +159,10 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
                         ViewGroup draggedImageViewParentLayout
                                 = (ViewGroup) draggedImageView.getParent();
                         draggedImageViewParentLayout.removeView(draggedImageView);
-                        RelativeLayout bottomLinearLayout = (RelativeLayout) receivingLayoutView;
-                        bottomLinearLayout.addView(draggedImageView);
+                        RelativeLayout bottomRelativeLayout = (RelativeLayout) receivingLayoutView;                        
+                        bottomRelativeLayout.addView(draggedImageView);
+                        //RelativeLayout.LayoutParams paramsCurr = new RelativeLayout.LayoutParams((int) (50+(200*(dragEvent.getY()/1000))), (int) (50+(200*(dragEvent.getY()/1000))));
+                        //bottomRelativeLayout.addView(draggedImageView, paramsCurr);
                         draggedImageView.setVisibility(View.VISIBLE);
                         return true;
                     
@@ -164,7 +172,6 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
                 }
 
             case DragEvent.ACTION_DRAG_ENDED:
-
                 Log.i(TAG, "drag action ended");
                 Log.i(TAG, "getResult: " + dragEvent.getResult());
                 
