@@ -73,7 +73,7 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
     	// create clip data holding data of the type MIMETYPE_TEXT_PLAIN
         ClipData clipData = ClipData.newPlainText("", "");
 
-        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(imageView);
+        View.DragShadowBuilder shadowBuilder = new View.DragShadowBuilder();
         /*start the drag - contains the data to be dragged,
         metadata for this data and callback for drawing shadow*/
         imageView.startDrag(clipData, shadowBuilder, imageView, 0);
@@ -93,7 +93,7 @@ public class MainActivity extends Activity implements OnDragListener, View.OnLon
         draggedImageView.setVisibility(View.VISIBLE);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams((int) (50+(100*(dragEvent.getY()/500))), (int) (50+(100*(dragEvent.getY()/500))));
  
-        params.leftMargin = (int) (50 + dragEvent.getX());
+        params.leftMargin = (int) (dragEvent.getX());
         params.topMargin = (int) (dragEvent.getY());
         rl.removeView(ball1);
         rl.addView(ball1, params);
